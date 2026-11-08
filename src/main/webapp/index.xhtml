@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>TP2 - Chat LangChain4j - Nada Marnissi</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .question {
+            background: #e7f0ff;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 6px;
+        }
+
+        .reponse {
+            background: #e8f6ed;
+            padding: 12px;
+            margin-top: 6px;
+            border-radius: 6px;
+            white-space: pre-wrap;
+        }
+
+        .champ {
+            width: 100%;
+            box-sizing: border-box;
+            margin: 12px 0;
+            padding: 10px;
+        }
+
+        .bouton {
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+    <div class="container">
+
+        <h1>Chat IA avec LangChain4j</h1>
+        <p>TP2 Jakarta EE - Nada Marnissi</p>
+
+        <h:form id="chatForm">
+
+            <!-- Choisir le rôle de Gemini avant la conversation. -->
+            <h:outputLabel for="role"
+                           value="Rôle de l'assistant : "/>
+
+            <h:selectOneMenu id="role"
+                             value="#{bb.role}"
+                             disabled="#{not empty bb.historique}">
+
+                <f:selectItem itemValue="assistant"
+                              itemLabel="Assistant général"/>
+
+                <f:selectItem itemValue="traducteur"
+                              itemLabel="Traducteur anglais"/>
+
+            </h:selectOneMenu>
+
+            <hr/>
+
+            <h3>Votre question</h3>
+
+            <h:inputTextarea id="question"
+                             value="#{bb.question}"
+                             styleClass="champ"
+                             rows="4"/>
+
+            <!-- Envoyer une question à Gemini. -->
+            <h:commandButton value="Envoyer"
+                             action="#{bb.envoyer}"
+                             styleClass="bouton"/>
+
+            <!-- Effacer la conversation et la mémoire de Gemini. -->
+            <h:commandButton value="Nouvelle conversation"
+                             action="#{bb.nouvelleConversation}"
+                             styleClass="bouton"/>
+
+            <hr/>
+
+            <h3>Historique de la conversation</h3>
+
+            <h:panelGroup rendered="#{empty bb.historique}">
+                <p>Aucun message pour le moment.</p>
+            </h:panelGroup>
+
+            <h:dataTable value="#{bb.historique}"
+                         var="echange"
+                         rendered="#{not empty bb.historique}">
+
+                <h:column>
+
+                    <div class="question">
+                        <strong>Vous :</strong>
+                        <h:outputText value="#{echange.question}"/>
+                    </div>
+
+                    <div class="reponse">
+                        <strong>Gemini :</strong>
+                        <h:outputText value="#{echange.reponse}"/>
+                    </div>
+
+                </h:column>
+
+            </h:dataTable>
+
+        </h:form>
+
+    </div>
+
+</h:body>
+</html>
